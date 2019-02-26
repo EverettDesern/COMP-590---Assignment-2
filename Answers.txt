@@ -1,0 +1,45 @@
+1. What scheme or schemes did you try? If you came up your own idea, describe it here. 
+
+	I decided to use the differential coding scheme, however, I changed it up a little bit. 
+  When compressing the video data, I had two source models. The first source model took 
+  each frame (300 in total) and only looked at the very first pixel. I decided to keep the 
+  very first pixel of each frame unhindered by the differential coding. My probability distribution 
+  for this model had values ranging from 0 to 256, because that’s the original pixel value range. 
+  For my second source model, I decided to take the remaining pixels of each frame (4095 in total per frame)
+  and used differential coding on them, meaning I found the difference between each pixel with the previous pixel.
+  This probability distribution had values ranging from -255 to 256, because that’s the range needed when
+  implementing a differential coder. The first model had a normal curve centered at 128, and the second had a
+  normal curve centered at 0.
+
+2. Why do you think your scheme would do a good job predicting pixel values? How does your scheme exploit temporal
+and/or spatial coherence?
+
+	I thought this scheme would be good at predicting pixel values, because by taking the first pixel of each frame
+  and not changing it, it takes into account the first pixel of the next frame could possibly be extremely different
+  from the previous frame’s first pixel. Also, by comparing previous pixels, it predicts the following pixels pretty
+  well, since neighboring pixels usually don’t change their value too much. This is shown in my probability distribution
+  for the differential model, since the mean of the normal distribution is at 0. This means that on average, the
+  difference between neighboring pixels is 0. My scheme uses spatial coherence, since I compare each pixel with
+  the pixel directly behind it. I do not use temporal coherence, since I do not compare pixels of opposing
+  frames at all.
+
+3. When applying the English text-based models (static, adaptive, and context-adaptive) to the video data, which
+scheme performed best? Does the scheme you developed compress better or worse than the English text-based
+models when applied to video data? If you weren't able to finish and test your own scheme, how do you think
+your scheme would fare in comparison to the English text-based models?
+
+	The static model compresses the video file from 1,228,800 bytes to 1,064,024 bytes. The adaptive model compresses
+  the video file from 1,228,800 bytes to 1,063,224 bytes. The context-adaptive model compresses the video file
+  from 1,228,800 bytes to 909,144 bytes. The context-adaptive model is the best at compressing the video data without
+  using spatial or temporal coherence.
+  Now, using my differential coder, the static model compresses the file from 1,228,800 bytes to 913,084 bytes
+  (excluding the header bytes). When I use the adaptive model, it compresses the file from 1,228,800 bytes to 913,744 bytes.
+  When I use the context-adaptive model, it compresses the file from 1,228,800 bytes to 923,236 bytes. The static model
+  compressed my scheme the best, but the adaptive model was a very close second.
+  My differential coder scheme compressed the data better for the static and adaptive models, however, it compressed
+  the data worse for the context-adaptive model.
+
+4. What is one change you could make to your scheme that might improve its results?
+	To improve my compression, I could have incorporated both spatial and temporal coherence, instead of
+  just spatial coherence. I did not think about comparing pixels across different frames, and if I did, it
+  would have compressed the data even more, since it would be even better at predicting pixel values.
